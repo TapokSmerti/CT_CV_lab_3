@@ -25,3 +25,17 @@ m = np.array(d["masks"])
 
 print('json data')
 print(m.shape)
+
+from dataset import RoadSignsDataset
+
+ds = RoadSignsDataset(
+    "dataset/sign_dataset/train"
+)
+
+img, target = ds[0]
+
+print(img.shape)
+
+print(target["boxes"].shape)
+print(target["labels"].shape)
+print(target["masks"].shape)

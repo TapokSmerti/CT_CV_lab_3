@@ -1,47 +1,124 @@
-from ultralytics import YOLO
+import torch
 
-def main():
+from torch.utils.data import DataLoader
 
-    # предобученная segmentation модель
-    model = YOLO("yolo11n-seg.pt")
+from dataset import RoadSignsDataset
 
-    model.train(
-        data="data.yaml",
+from torchvision.models.detection import (
+    maskrcnn_resnet50_fpn
+)
 
-        epochs=100,
-        imgsz=640,
-        batch=16,
+from torchvision.models.detection.faster_rcnn import (
+    FastRCNNPredictor
+)
 
-        device=0,
+from torchvision.models.detection.mask_rcnn import (
+    MaskRCNNPredictor
+)
 
-        workers=8,
 
-        optimizer="AdamW",
+def collate(batch):
+    return tuple(zip(*batch))
 
-        lr0=1e-3,
 
-        project="runs",
-        name="russian_signs_seg",
+train_ds = RoadSignsDataset(
+    "dataset/sign_dataset/train"
+)
 
-        patience=20,
+loader = DataLoader(
+    train_ds,
+    batch_size=2,
+    shuffle=True,
+    collate_fn=collate,
+    num_workers=4
+)
 
-        save=True,
-        save_period=10,
+model = maskrcnn_resnet50_fpn(
+    weights="DEFAULT"
+)
 
-        hsv_h=0.015,
-        hsv_s=0.7,
-        hsv_v=0.4,
+num_classes = 9
 
-        degrees=10,
-        translate=0.1,
-        scale=0.3,
-        shear=2.0,
+in_features = (
+    model.roi_heads.box_predictor
+    .cls_score.in_features
+)
 
-        mosaic=1.0,
-        mixup=0.1,
+model.roi_heads.box_predictor = (
+    FastRCNNPredictor(
+        in_features,
+        num_classes
+    )
+)
 
-        pretrained=True
+in_features_mask = (
+    model.roi_heads.mask_predictor
+    .conv5_mask.in_channels
+)
+
+model.roi_heads.mask_predictor = (
+    MaskRCNNPredictor(
+        in_features_mask,
+        256,
+        num_classes
+    )
+)
+
+device = "cuda"
+
+model.to(device)
+
+optimizer = torch.optim.AdamW(
+    model.parameters(),
+    lr=1e-4
+)
+
+epochs = 20
+
+for epoch in range(epochs):
+
+    model.train()
+
+    loss_sum = 0
+
+    for images, targets in loader:
+
+        images = [
+            x.to(device)
+            for x in images
+        ]
+
+        targets = [
+            {
+                k: v.to(device)
+                for k,v in t.items()
+            }
+            for t in targets
+        ]
+
+        losses = model(
+            images,
+            targets
+        )
+
+        loss = sum(
+            losses.values()
+        )
+
+        optimizer.zero_grad()
+
+        loss.backward()
+
+        optimizer.step()
+
+        loss_sum += loss.item()
+
+    print(
+        f"epoch {epoch}:",
+        loss_sum / len(loader)
     )
 
-if __name__ == "__main__":
-    main()
+torch.save(
+    model.state_dict(),
+    "maskrcnn_signs.pth"
+)

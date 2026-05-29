@@ -9,14 +9,5 @@ tqdm
 pillow
 
 matplotlib
-scikit-learn
-
-pycocotools
 
 pandas
-
-lap
-filterpy
-
-deep-sort-realtime
-supervision

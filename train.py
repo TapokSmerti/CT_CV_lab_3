@@ -27,10 +27,10 @@ train_ds = RoadSignsDataset(
 
 loader = DataLoader(
     train_ds,
-    batch_size=64,
+    batch_size=4,
     shuffle=True,
     collate_fn=collate,
-    num_workers=12
+    num_workers=0
 )
 
 model = maskrcnn_resnet50_fpn(

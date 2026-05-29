@@ -1,15 +1,12 @@
 import os
 import zipfile
+import kaggle
 
 dataset = "viacheslavshalamov/russian-road-signs-segmentation-dataset"
 
-os.system(
-    f'kaggle datasets download -d {dataset} -p data'
-)
+os.makedirs("dataset", exist_ok=True)
 
-zip_path = "dataset/russian-road-signs-segmentation-dataset.zip"
+kaggle.api.dataset_download_files(dataset, path="dataset", unzip=True)
 
-with zipfile.ZipFile(zip_path, "r") as zip_ref:
-    zip_ref.extractall("dataset")
+print("Dataset downloaded and extracted to 'dataset' folder")
 
-print("Dataset downloaded")

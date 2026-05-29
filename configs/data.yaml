@@ -1,0 +1,15 @@
+path: dataset
+
+train: train/images
+val: val/images
+test: test/images
+
+names:
+  0: stop
+  1: pedestrian
+  2: parking
+  3: no_entry
+  4: priority
+  5: crossing
+  6: speed_limit
+  7: traffic_lights

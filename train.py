@@ -27,17 +27,17 @@ train_ds = RoadSignsDataset(
 
 loader = DataLoader(
     train_ds,
-    batch_size=2,
+    batch_size=64,
     shuffle=True,
     collate_fn=collate,
-    num_workers=4
+    num_workers=12
 )
 
 model = maskrcnn_resnet50_fpn(
     weights="DEFAULT"
 )
 
-num_classes = 9
+num_classes = 8
 
 in_features = (
     model.roi_heads.box_predictor

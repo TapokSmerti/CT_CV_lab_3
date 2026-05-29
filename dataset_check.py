@@ -39,3 +39,23 @@ print(img.shape)
 print(target["boxes"].shape)
 print(target["labels"].shape)
 print(target["masks"].shape)
+
+# Добавь в конец dataset_check.py или запусти отдельно
+
+from dataset import RoadSignsDataset
+import torch
+
+ds = RoadSignsDataset("dataset/sign_dataset/train")
+
+print("chech first 20 samples validity...")
+for i in range(20):
+    img, target = ds[i]
+    labels = target["labels"]
+    assert labels.min() >= 1, f"Сэмпл {i}: метка < 1: {labels}"
+    assert labels.max() <= 8, f"Сэмпл {i}: метка > 8: {labels}"
+    boxes = target["boxes"]
+    assert (boxes[:, 2] > boxes[:, 0]).all(), f"sample {i}: invalid bbox (x2<=x1)"
+    assert (boxes[:, 3] > boxes[:, 1]).all(), f"sample {i}: invalid bbox (y2<=y1)"
+    print(f"  [{i}] labels={labels.tolist()}  boxes_shape={boxes.shape}  masks_shape={target['masks'].shape}")
+
+print("OK!")

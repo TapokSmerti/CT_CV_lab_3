@@ -59,3 +59,49 @@ for i in range(20):
     print(f"  [{i}] labels={labels.tolist()}  boxes_shape={boxes.shape}  masks_shape={target['masks'].shape}")
 
 print("OK!")
+
+# check_classes.py
+import json
+from pathlib import Path
+from collections import Counter
+
+data_root = Path("dataset/sign_dataset/train")
+jsons = sorted(data_root.glob("*.json"))[:200]
+
+all_class_ids = []
+for jp in jsons:
+    with open(jp) as f:
+        d = json.load(f)
+    all_class_ids.extend(d.get("class_ids", []))
+
+print("Уникальные class_ids в датасете:", sorted(set(all_class_ids)))
+print("Распределение:", Counter(all_class_ids).most_common())
+
+# check_one.py
+import json
+import cv2
+import numpy as np
+from pathlib import Path
+
+# берём первый попавшийся файл
+jp = sorted(Path("dataset/sign_dataset/train").glob("*.json"))[0]
+img_path = Path(str(jp).replace("_coco.json", ""))
+
+with open(jp) as f:
+    d = json.load(f)
+
+print("Файл:", jp.name)
+print("class_ids:", d.get("class_ids"))
+print("bbox (первый):", d.get("bbox", [[]])[0])
+print("Все ключи JSON:", list(d.keys()))
+
+# Визуализируем боксы на картинке
+img = cv2.imread(str(img_path))
+if img is not None:
+    for box, cid in zip(d.get("bbox", []), d.get("class_ids", [])):
+        y1, x1, y2, x2 = [int(v) for v in box]
+        cv2.rectangle(img, (x1, y1), (x2, y2), (0, 255, 0), 2)
+        cv2.putText(img, str(cid), (x1, y1-5),
+                    cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0,255,0), 2)
+    cv2.imwrite("check_boxes.jpg", img)
+    print("Сохранено: check_boxes.jpg — посмотри что там нарисовано")

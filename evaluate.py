@@ -1,7 +1,7 @@
 # evaluate_yolo.py
 from ultralytics import YOLO
 
-model = YOLO("runs/seg/yolo11_signs/weights/best.pt")
+model = YOLO(" runs/segment/runs/seg/yolo11_signs/weights/best.pt")
 
 metrics = model.val(
     data="dataset/data.yaml",

@@ -3,7 +3,7 @@ from ultralytics import YOLO
 from pathlib import Path
 import cv2
 
-model = YOLO("runs/seg/yolo11_signs/weights/best.pt")
+model = YOLO(" runs/segment/runs/seg/yolo11_signs/weights/best.pt")
 
 for video in Path("videos").glob("*.mp4"):
     model.predict(

@@ -106,6 +106,27 @@ if img is not None:
     cv2.imwrite("check_boxes.jpg", img)
     print("Сохранено: check_boxes.jpg — посмотри что там нарисовано")
 
+
+# find_sign_classes.py
+import json
+from pathlib import Path
+from collections import defaultdict
+import cv2
+import numpy as np
+
+data_root = Path("dataset/sign_dataset/train")
+jsons = sorted(data_root.glob("*.json"))
+
+# Смотрим все ключи и структуру
+with open(jsons[0]) as f:
+    d = json.load(f)
+print("Ключи JSON:", list(d.keys()))
+print("class_ids пример:", d.get("class_ids"))
+
+# Проверяем есть ли поле с именами классов
+for key in d.keys():
+    print(f"\n{key}:", d[key] if key != "masks" else f"<masks shape {np.array(d[key]).shape}>")
+
 # visualize_classes.py
 import json
 import cv2

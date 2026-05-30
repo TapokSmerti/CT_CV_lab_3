@@ -5,7 +5,7 @@ import cv2
 import numpy as np
 from collections import defaultdict
 
-model = YOLO("runs/seg/yolo11_roadsigns_v2/weights/best.pt")
+model = YOLO("runs/segment/runs/seg/yolo11_signs_v2/weights/best.pt")
 
 def count_id_switches(history: dict) -> int:
     """

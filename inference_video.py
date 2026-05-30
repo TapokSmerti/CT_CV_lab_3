@@ -9,7 +9,7 @@ for video in Path("videos").glob("*.mp4"):
     model.predict(
         source=str(video),
         save=True,
-        conf=0.35,
+        conf=0.5,
         project="videos/output",
         name=video.stem,
     )

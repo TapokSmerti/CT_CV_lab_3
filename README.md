@@ -10,12 +10,12 @@
 ```
 CT_CV_lab_3/
 ├── dataset/                  # датасет (в .gitignore)
-│   └── rrs/
-│       ├── train/images/
-│       ├── train/labels/
-│       ├── valid/images/
-│       ├── valid/labels/
-│       └── data.yaml
+│   └
+│    ├── train/images/
+│    ├── train/labels/
+│    ├── valid/images/
+│    ├── valid/labels/
+│    └── data.yaml
 ├── videos/                   # исходные видео для тестирования
 │   └── output/               # сюда сохраняются результаты
 ├── runs/                     # веса моделей после обучения
@@ -68,7 +68,7 @@ pyyaml
 python3 download_dataset.py
 ```
 
-Датасет скачается в `dataset/rrs/`. Убедись что `dataset/data.yaml` указывает на правильные пути.
+Датасет скачается в `dataset/`. Убедись что `dataset/data.yaml` указывает на правильные пути.
 
 ### 3. Обучение модели
 
@@ -120,7 +120,7 @@ VAL_DIR   = "dataset/rrs/valid"
 python3 inference_video.py
 ```
 
-Результаты сохранятся в `videos/output/<имя_видео>/`.
+Результаты сохранятся в `runs/segment/videos/output/<имя_видео>/`.
 
 ### 6. Трекинг и подсчёт ID Switches
 
@@ -180,3 +180,30 @@ video2.mp4                             bytetrack      5     18
 [Russian Road Signs — Roboflow Universe](https://universe.roboflow.com/buda-vampilov/russian-road-signs-m4lzc)
 
 ~2000 изображений дорожных сцен с разметкой сегментации знаков в формате YOLO-seg.
+
+## Валидация
+=========================================================
+Class               mIoU     Prec     Rec   L2(px)      N
+=========================================================
+object             0.771    0.816   0.939      4.1      5
+road sign          0.788    0.840   0.928      4.9    144
+=========================================================
+mIoU overall       0.788
+
+IoU threshold coverage (% images with at least one match):
+  IoU >= 0.5:  69.2%  (81/117)
+  IoU >= 0.75:  63.2%  (74/117)
+  IoU >= 0.9:   7.7%  (9/117)
+=========================================================
+
+## Трекинг
+====================================================================
+Video                                  Tracker         ID Sw      IDs
+====================================================================
+2026-05-29-22-28-32-123_no_audio_resized.mp4 bytetrack   0       14
+2026-05-29-22-28-32-123_no_audio_resized.mp4 botsort     0       14
+2026-05-29-22-29-27-574_no_audio_resized.mp4 bytetrack   0       20
+2026-05-29-22-29-27-574_no_audio_resized.mp4 botsort     0       20
+2026-05-29-22-30-22-158_no_audio_resized.mp4 bytetrack   1       33
+2026-05-29-22-30-22-158_no_audio_resized.mp4 botsort     1       33
+====================================================================

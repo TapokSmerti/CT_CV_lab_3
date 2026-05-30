@@ -10,7 +10,7 @@ import yaml
 # ── Конфиг ────────────────────────────────────────────────────────
 WEIGHTS   = "runs/segment/runs/seg/yolo11_signs_v2/weights/best.pt"
 DATA_YAML = "dataset/data.yaml"
-VAL_DIR   = "dataset/rrs/valid"   # папка с images/ и labels/
+VAL_DIR   = "dataset/valid"   # папка с images/ и labels/
 CONF      = 0.5
 IOU_THR   = 0.5
 IMG_SIZE  = 1280

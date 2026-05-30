@@ -1,4 +1,5 @@
 # tracking.py
+from __future__ import annotations
 from ultralytics import YOLO
 from pathlib import Path
 import cv2

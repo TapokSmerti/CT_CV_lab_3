@@ -4,7 +4,7 @@ from ultralytics import YOLO
 model = YOLO("yolo11s-seg.pt")  # скачается автоматически
 
 results = model.train(
-    data="dataset_roboflow/data.yaml",
+    data="dataset/data.yaml",
     epochs=50,
     imgsz=640,
     batch=8,

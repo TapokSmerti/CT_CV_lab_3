@@ -1,12 +1,12 @@
 # evaluate_yolo.py
 from ultralytics import YOLO
 
-model = YOLO("runs/segment/runs/seg/yolo11_signs-2/weights/best.pt")
+model = YOLO("runs/segment/runs/seg/yolo11_signs_v2/weights/best.pt")
 
 metrics = model.val(
     data="dataset/data.yaml",
     split="val",
-    conf=0.35,
+    conf=0.5,
     iou=0.5,
 )
 

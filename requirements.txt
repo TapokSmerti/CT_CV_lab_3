@@ -9,3 +9,6 @@ tqdm
 pillow
 matplotlib
 pandas
+
+filterpy 
+scipy

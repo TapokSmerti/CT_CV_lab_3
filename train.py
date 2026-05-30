@@ -18,7 +18,7 @@ train_ds = RoadSignsDataset("dataset/sign_dataset/train")
 
 loader = DataLoader(
     train_ds,
-    batch_size=4,
+    batch_size=16,
     shuffle=True,
     collate_fn=collate,
     num_workers=0
@@ -40,7 +40,7 @@ model.to(device)
 optimizer = torch.optim.AdamW(model.parameters(), lr=1e-4)
 scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=7, gamma=0.5)
 
-epochs = 20
+epochs = 40
 best_loss = float("inf")
 
 for epoch in range(epochs):
